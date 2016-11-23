@@ -15,12 +15,15 @@ import { OnInit } from '@angular/core';
 })
 
 export class CashRegisterComponent {
-    title = 'Cash Register';
     items: Item[];
-    order: Order;
     lastItems: Item[] = [];
+    order: Order;
+    isPaying: boolean;
+    amountTendered: number;
 
-    constructor(private cashRegisterService: CashRegisterService) {
+    constructor(
+        private cashRegisterService: CashRegisterService
+    ) {
         this.order = new Order();
     }
 
@@ -29,19 +32,36 @@ export class CashRegisterComponent {
     }
 
     addItem(item: Item): void {
+        if (this.order.tenderRecord)
+            return;
+
         this.lastItems.push(item);
 
         this.cashRegisterService.addItem(this.order, item);
     }
 
-    pay(): void {
-        if (this.cashRegisterService.makePayment(this.order, 100)) {
-            this.order = new Order();
-            this.lastItems.splice(0);
+    makePayment(): void {
+        if (this.order.tenderRecord)
+            return;
+
+        if (this.order.items.length === 0)
+            return;
+
+        this.amountTendered = null;
+
+        this.isPaying = true;
+    }
+
+    pay(amount: number): void {
+        if (this.cashRegisterService.makePayment(this.order, amount)) {
+            this.isPaying = false;
         }
     }
 
     voidLastItem(): void {
+        if (this.order.tenderRecord)
+            return;
+            
         while (this.lastItems.length > 0 && !this.cashRegisterService.removeItem(this.order, this.lastItems[this.lastItems.length - 1]))
             this.lastItems.splice(this.lastItems.length - 1);
     }

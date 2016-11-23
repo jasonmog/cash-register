@@ -95,7 +95,7 @@ export class CashRegisterService {
 
         order.tenderRecord = new TenderRecord();
         order.tenderRecord.amountTendered = amount;
-        order.tenderRecord.changeGiven = order.grandTotal - amount;
+        order.tenderRecord.changeGiven = amount - order.grandTotal;
 
         var lastOrderNumber: number;
 
@@ -145,7 +145,7 @@ export class CashRegisterService {
         }
     }
 
-    removeItem(order: Order, item: Item): void {
+    removeItem(order: Order, item: Item): boolean {
         var lineItem: OrderLineItem;
 
         for (var i = 0; i < order.items.length; i++) {

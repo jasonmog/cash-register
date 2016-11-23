@@ -3,7 +3,7 @@
 
     <div class="main">
         <div class="menu">
-            <button *ngFor="let item of items" (click)="addItem(item)">{{item.name}}</button>
+            <button [class.disabled]="order.tenderRecord" *ngFor="let item of items" (click)="addItem(item)">{{item.name}}</button>
         </div>
 
         <div class="cart">
@@ -34,11 +34,36 @@
                     Grand Total:
                     <span class="total">{{order.grandTotal | currency:'USD':'$'}}</span>
                 </p>
+                <p *ngIf="order.tenderRecord">
+                    Amount Tendered:
+                    <span class="total">{{order.tenderRecord.amountTendered | currency:'USD':'$'}}</span>
+                </p>
+                <p *ngIf="order.tenderRecord">
+                    Change Given:
+                    <span class="total">{{order.tenderRecord.changeGiven | currency:'USD':'$'}}</span>
+                </p>
             </div>
 
             <div class="buttons">
-                <button class="void" [class.disabled]="order.items.length === 0" (click)="voidLastItem()">VOID</button>
-                <button class="pay" (click)="pay()">PAY NOW</button>
+                <button class="void" [class.disabled]="order.items.length === 0 || order.tenderRecord" (click)="voidLastItem()">VOID</button>
+                <button class="pay" [class.disabled]="order.items.length === 0 || order.tenderRecord" (click)="makePayment()">PAY NOW</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-dialog-container" *ngIf="isPaying">
+        <div class="payment-dialog">
+            <h2>TENDER PAYMENT</h2>
+
+            <div class="form">
+                <div><span>Amount Due:</span>        <span>{{order.grandTotal | currency:'USD':'$'}}</span></div>
+                <div><span>Amount Tendered:</span>   <span>$<input [(ngModel)]="amountTendered" required  /></span></div>
+                <div><span>Change Due:</span>        <span>{{(amountTendered > order.grandTotal ? amountTendered - order.grandTotal : 0) | currency:'USD':'$'}}</span></div>
+            </div>
+
+            <div class="buttons">
+                <button (click)="isPaying = false">CANCEL</button>
+                <button [class.disabled]="amountTendered < order.grandTotal" (click)="pay(amountTendered)">TENDER</button>
             </div>
         </div>
     </div>
