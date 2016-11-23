@@ -3,29 +3,21 @@ import { BrowserModule }  from '@angular/platform-browser';
 import { FormsModule }    from '@angular/forms';
 import { RouterModule }   from '@angular/router';
 
-import { AppComponent }        from './app.component';
 import { CashRegisterComponent } from './cash-register.component';
 import { CashRegisterService } from './cash-register.service';
 
 @NgModule({
   imports: [
     BrowserModule,
-    FormsModule,
-    RouterModule.forRoot([
-      {
-        path: 'cashregister',
-        component: CashRegisterComponent
-      }
-    ])
+    FormsModule
   ],
   declarations: [
-    AppComponent,
     CashRegisterComponent
   ],
   providers: [
     CashRegisterService
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ CashRegisterComponent ]
 })
 export class AppModule {
 }

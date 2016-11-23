@@ -6,7 +6,7 @@ export class OrderLineItem {
   extendedPrice: number;
   item: Item;
 
-  addItem(item): void {
+  addItem(item: Item): void {
     this.item = item;
     this.qty++;
     this.extendedPrice = item.price * this.qty;

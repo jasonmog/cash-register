@@ -18,38 +18,31 @@ export class CashRegisterComponent {
     title = 'Cash Register';
     items: Item[];
     order: Order;
+    lastItems: Item[] = [];
 
-    constructor(private cashRegisterService: CashRegisterService) { }
+    constructor(private cashRegisterService: CashRegisterService) {
+        this.order = new Order();
+    }
 
     ngOnInit(): void {
         this.cashRegisterService.getItems().then(items => this.items = items);
-        this.voidOrder();
     }
 
-    addItem(item): void {
-        var lineItem: OrderLineItem;
+    addItem(item: Item): void {
+        this.lastItems.push(item);
 
-        for (var i = 0; i < this.order.items.length; i++) {
-            lineItem = this.order.items[i];
-
-            if (lineItem.item === item) {
-                lineItem.addItem(item);
-
-                return;
-            }
-        }
-
-        lineItem = new OrderLineItem();
-        lineItem.addItem(item);
-
-        this.order.items.push(lineItem);
+        this.cashRegisterService.addItem(this.order, item);
     }
 
     pay(): void {
-
+        if (this.cashRegisterService.makePayment(this.order, 100)) {
+            this.order = new Order();
+            this.lastItems.splice(0);
+        }
     }
 
-    voidOrder(): void {
-        this.order = new Order();
+    voidLastItem(): void {
+        while (this.lastItems.length > 0 && !this.cashRegisterService.removeItem(this.order, this.lastItems[this.lastItems.length - 1]))
+            this.lastItems.splice(this.lastItems.length - 1);
     }
 }

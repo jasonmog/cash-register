@@ -1,5 +1,5 @@
 export class TenderRecord {
   amountTendered: number;
-  timestamp: number;
+  timestamp: number = new Date().getTime();
   changeGiven: number;
 }

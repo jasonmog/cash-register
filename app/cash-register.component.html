@@ -1,0 +1,45 @@
+<div class="cash-register">
+    <button class="orders-button" (click)="showOrders()">ORDERS</button>
+
+    <div class="main">
+        <div class="menu">
+            <button *ngFor="let item of items" (click)="addItem(item)">{{item.name}}</button>
+        </div>
+
+        <div class="cart">
+            <p>New Order<span *ngIf="order"> / Order #{{order.orderNumber}}</span></p>
+
+            <div class="order-items">
+                <div class="list">
+                    <table>
+                        <tbody>
+                            <tr *ngFor="let item of order.items">
+                                <td class="quantity">{{item.qty}}</td>
+                                <td class="name">{{item.item.name}}</td>
+                                <td class="price">{{item.extendedPrice | currency:'USD':'$'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    Subtotal:
+                    <span class="subtotal">{{order.subTotal | currency:'USD':'$'}}</span>
+                </p>
+                <p>
+                    Sales Tax:
+                    <span class="tax">{{order.totalTax | currency:'USD':'$'}}</span>
+                </p>
+                <p>
+                    Grand Total:
+                    <span class="total">{{order.grandTotal | currency:'USD':'$'}}</span>
+                </p>
+            </div>
+
+            <div class="buttons">
+                <button class="void" [class.disabled]="order.items.length === 0" (click)="voidLastItem()">VOID</button>
+                <button class="pay" (click)="pay()">PAY NOW</button>
+            </div>
+        </div>
+    </div>
+</div>
