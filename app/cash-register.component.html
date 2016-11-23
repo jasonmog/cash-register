@@ -1,5 +1,5 @@
 <div class="cash-register">
-    <button class="orders-button" (click)="showOrders()">ORDERS</button>
+    <button class="orders-button">ORDERS</button>
 
     <div class="main">
         <div class="menu">
@@ -7,7 +7,7 @@
         </div>
 
         <div class="cart">
-            <p>New Order<span *ngIf="order"> / Order #{{order.orderNumber}}</span></p>
+            <p>New Order<span *ngIf="order"> / Order #{{order.orderNumber | number:'3.0'}}</span></p>
 
             <div class="order-items">
                 <div class="list">

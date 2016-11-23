@@ -9,7 +9,7 @@ import { SalesTaxRate } from './sales-tax-rate';
 @Injectable()
 export class CashRegisterService {
     items: Item[];
-    orders: Order[] = [];
+    orders: Order[];
     tax: SalesTaxRate;
 
     constructor() {
@@ -51,6 +51,23 @@ export class CashRegisterService {
 
         this.tax = new SalesTaxRate();
         this.tax.rate = .07;
+
+        if (typeof localStorage !== 'undefined') {
+            var str = localStorage.getItem('orders');
+
+            if (str) {
+                var obj = JSON.parse(str);
+
+                if (Array.isArray(obj))
+                    this.orders = obj;
+                else
+                    this.orders = [];
+            } else {
+                this.orders = [];
+            }
+        } else {
+            this.orders = [];
+        }
     }
 
     recalculateTotals(order: Order): void {
@@ -122,6 +139,8 @@ export class CashRegisterService {
 
         this.orders.push(order);
 
+        this.save();
+
         return true;
     }
 
@@ -166,5 +185,10 @@ export class CashRegisterService {
         }
 
         return false;
+    }
+
+    save(): void {
+        if (typeof localStorage !== 'undefined')
+            localStorage.setItem('orders', JSON.stringify(this.orders));
     }
 }

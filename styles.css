@@ -30,7 +30,7 @@ p {
     }
 
 .cart {
-    width: 200px;
+    width: 300px;
 }
 
     .order-items {
@@ -40,6 +40,10 @@ p {
 
         .order-items .list {
             min-height: 300px;
+        }
+
+        .order-items table {
+            width: 100%;
         }
 
         .order-items tr {
@@ -52,6 +56,10 @@ p {
 
         .quantity {
             width: 20px;
+        }
+
+        .price {
+            text-align: right;
         }
 
     .subtotal, .tax, .total {
