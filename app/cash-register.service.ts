@@ -142,7 +142,6 @@ export class CashRegisterService {
 
         if (qty > 0) {
             lineItem = new OrderLineItem();
-            lineItem.qty = qty;
             lineItem.addItem(item);
 
             order.items.push(lineItem);
