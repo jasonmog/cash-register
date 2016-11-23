@@ -10,6 +10,7 @@ import { SalesTaxRate } from './sales-tax-rate';
 export class CashRegisterService {
     items: Item[];
     orders: Order[] = [];
+    tax: SalesTaxRate;
 
     constructor() {
         // I tried for a long while to get the fs and csv modules working in TypeScript, but the page kept trying to load them as files in the web root and 404ing
@@ -47,6 +48,9 @@ export class CashRegisterService {
         }
 
         this.items = items;
+
+        this.tax = new SalesTaxRate();
+        this.tax.rate = .07;
     }
 
     recalculateTotals(order: Order): void {
@@ -69,6 +73,8 @@ export class CashRegisterService {
           if (lineItem.item === item) {
               lineItem.addItem(item);
 
+              this.recalculateTotals(order);
+
               return;
           }
         }
@@ -86,7 +92,7 @@ export class CashRegisterService {
     }
 
     getTax(): number {
-        return .07;
+        return this.tax.rate;
     }
 
     makePayment(order: Order, amount: number): boolean {

@@ -8,6 +8,7 @@ export class OrderLineItem {
 
   addItem(item: Item): void {
     this.item = item;
+    this.price = item.price;
     this.qty++;
     this.extendedPrice = item.price * this.qty;
   }
